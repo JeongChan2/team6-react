@@ -13,6 +13,7 @@ import MusicPlayer from "./common/MusicPlayer/MusicPlayer";
 import { UserContextProvider } from "./context/UserContext";
 import PlayListPage from "./pages/PlayListPage/PlayListPage.jsx";
 import TrackListPage from "./pages/TrackListPage/TrackListPage.jsx";
+import ArtistDetailPage from "./pages/ArtistDetailPage/ArtistDetailPage.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,7 +26,7 @@ function App() {
             <Route index element={<HomePage />} />{" "}
             {/* <Route path="music" element={<MusicPlayer/>}/> */}
             <Route
-              path="music"
+              path="playlist"
               /* 로그인 여부에 따라 페이지 렌더링 */
               // element={!isAuthenticated ? <LoginPage /> : <PlayListPage />
               element={<PlayListPage />}
@@ -38,7 +39,6 @@ function App() {
               /* 로그인 여부에 따라 페이지 렌더링 */
               element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />}
             />
-            <Route path="/playlist" element={<MusicPlayer />} />
             <Route path="albums">
               <Route
                 path=":id"
@@ -54,6 +54,9 @@ function App() {
                 // element={!isAuthenticated ? <LoginPage/> : <TrackDetailPage/>
                 element={<TrackDetailPage />}
               />
+            </Route>
+            <Route path="artists">
+              <Route path=":id" element={<ArtistDetailPage />} />
             </Route>
           </Route>
           {/* 오류 화면 */}
