@@ -5,7 +5,8 @@ radion은 radio와 on을 결합된 단어로, 라디오처럼 언제 어디서�
 <br/>
 
 ## 링크
-- [배포](https://radion-react-project.vercel.app/)
+- [vercel](https://radion-react-project.vercel.app/)
+- [netlify](https://radion-react-project.netlify.app/)
 - [Figma](https://www.figma.com/design/1XkwexEXjYZP0XyOWO04Dm/리액트-스터디-2기-6조?node-id=0-1&node-type=CANVAS&t=Rqzwfp7MrQ9fbRIU-0)
 <br/><br/>
 
