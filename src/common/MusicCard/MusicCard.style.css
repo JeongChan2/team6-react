@@ -59,12 +59,22 @@
 
 @media screen and (max-width: 768px) {
   .music_card_Releasest {
-
+    margin-top: 1em;
     height: 250px;
+    cursor: pointer;
+    margin-right: 100px;
+    transition: 0.5s;
+    position: relative;
   }
 
   .music_card_Releasest img {
-    height: 220px;
-    width: 220px;
+    height: 200px;
+      width: 200px;
+      cursor: pointer;
+        transition: transform 0.3s;
+        position: relative;
   }
-}
+  .music_card_Releasest img:hover{
+    transform: scale(1.2);
+    z-index: 999;
+  }}

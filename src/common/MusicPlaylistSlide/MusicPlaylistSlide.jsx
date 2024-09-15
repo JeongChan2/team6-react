@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Container } from "react-bootstrap";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -11,16 +12,17 @@ const MusicPlaylistSlide = ({ PlaylistData }) => {
       breakpoint: { max: 3000, min: 1024 },
       items: 5,
     },
-    tablet: {
+    tabletLandscape: {
       breakpoint: { max: 1830, min: 464 },
-      items: 4,
+      items: 5,
     },
-    tablet: {
+    tabletPortrait: {
       breakpoint: { max: 1024, min: 464 },
       items: 2,
     },
+    
     mobile: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: { max: 450, min:  0  },
       items: 1,
     }
   };
@@ -33,9 +35,10 @@ const MusicPlaylistSlide = ({ PlaylistData }) => {
               responsive={responsive}
               infinite={true}
               centerMode={true}
-              containerClass = "carousel-container"
-              itemClass = "movie-slider p-1"
-             >
+              containerClass="carousel-container"
+              itemClass="movie-slider p-1"
+              // "carousel-item"  // Apply a custom CSS class here to prevent slide image overlap
+            >
                 {PlaylistData.playlists.items.map((playlist, index)  => (
                         <MusicPlaylistCard playlist={playlist} key={index} />
                 ))}

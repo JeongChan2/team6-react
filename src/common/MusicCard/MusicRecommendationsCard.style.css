@@ -47,28 +47,18 @@
   }
   
   
-  @media screen and (max-width: 768px) {
-    .musicRecommendations-card {
-      margin-top: 1em;
-      height: 350px;
-    }
-  
-    .musicRecommendations-card img {
-      height: 220px;
-      width: 220px;
-    }
-  }
+
 @media screen and (max-width: 768px) {
     .musicRecommendations-card {
       margin-top: 1em;
-      height: 350px;
+      height: 250px;
       cursor: pointer;
       transition: 0.5s;
       position: relative;
     }
     .musicRecommendations img {
-      height: 220px;
-      width: 220px;
+        height: 200px;
+        width: 200px;
       cursor: pointer;
       transition: transform 0.3s;
       position: relative;
