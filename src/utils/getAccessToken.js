@@ -8,6 +8,7 @@ export const getAccessToken = async () => {
   authParams.append('grant_type', 'client_credentials');
   authParams.append('client_id', process.env.REACT_APP_CLIENT_ID);
   authParams.append('client_secret', process.env.REACT_APP_CLIENT_SECRET);
+
   try {
     const response = await axios.post(Base_URL, authParams.toString(), {
       headers: {
@@ -15,9 +16,10 @@ export const getAccessToken = async () => {
       },
     });
     const data = response.data;
-    const accessToken = data.access_token
+    const accessToken = data.access_token;
+    const expiresIn = data.expires_in; // 토큰 유효 시간 (초 단위)
 
-    return accessToken;
+    return { token: accessToken, expiresIn };
   } catch (error) {
     console.log('Error fetching access token:', error);
   }

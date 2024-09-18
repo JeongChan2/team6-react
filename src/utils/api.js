@@ -1,20 +1,52 @@
 import axios from "axios";
 import { getAccessToken } from "./getAccessToken";
 
-const api = axios.create({
-  baseURL:"https://api.spotify.com/v1",
-  headers:{
-    accept: 'application/json',
+let accessToken = null;
+let tokenExpiresAt = null;
+
+const loadTokenFromStorage = () => {
+  const storedToken = localStorage.getItem("accessToken");
+  const storedExpiry = localStorage.getItem("tokenExpiresAt");
+
+  if (storedToken && storedExpiry) {
+    accessToken = storedToken;
+    tokenExpiresAt = parseInt(storedExpiry);
   }
+};
+
+const saveTokenToStorage = (token, expiresIn) => {
+  const currentTime = new Date().getTime();
+  const expiryTime = currentTime + expiresIn * 1000;
+
+  localStorage.setItem("accessToken", token);
+  localStorage.setItem("tokenExpiresAt", expiryTime.toString());
+
+  accessToken = token;
+  tokenExpiresAt = expiryTime;
+};
+
+loadTokenFromStorage();
+
+const api = axios.create({
+  baseURL: "https://api.spotify.com/v1",
+  headers: {
+    accept: "application/json",
+  },
 });
 
 api.interceptors.request.use(
   async (config) => {
-    // 계속 토큰을 가져옴
-    const token = await getAccessToken();
-    
-    // Authorization 헤더에 토큰 추가
-    config.headers.Authorization = `Bearer ${token}`;
+    const currentTime = new Date().getTime();
+
+    // 토큰이 없거나 만료되었을 때만 새로운 토큰을 가져옴
+    if (!accessToken || currentTime >= tokenExpiresAt) {
+      const { token, expiresIn } = await getAccessToken();
+
+      // 새로운 토큰과 만료 시간 저장
+      saveTokenToStorage(token, expiresIn);
+    }
+
+    config.headers.Authorization = `Bearer ${accessToken}`;
 
     return config;
   },
@@ -24,15 +56,13 @@ api.interceptors.request.use(
 );
 
 // 응답 인터셉터 추가하기
-axios.interceptors.response.use(function (response) {
-  // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-  // 응답 데이터가 있는 작업 수행
-  return response;
-}, function (error) {
-  // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
-  // 응답 오류가 있는 작업 수행
-  return Promise.reject(error);
-});
-
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default api;
