@@ -18,7 +18,7 @@ export const getAccessToken = async () => {
     const data = response.data;
     const accessToken = data.access_token;
     const expiresIn = data.expires_in; // 토큰 유효 시간 (초 단위)
-
+    console.log("getAccessToken : ",accessToken)
     return { token: accessToken, expiresIn };
   } catch (error) {
     console.log('Error fetching access token:', error);

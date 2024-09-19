@@ -1,21 +1,41 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import "./AppLayout.style.css";
 import radionLogo from "../assets/radion_logo.png";
-import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../redux/reducers/authenticateSlice";
+import { useCurrentUserProfileQuery } from "../hooks/useCurrentUserProfile";
 
 const AppLayout = () => {
+  const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; // 너가 받아온 client ID
+  const REDIRECT_URI = 'http://localhost:3000/callback'; // 너가 설정한 redirect URI
+  const SCOPE = "streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state playlist-read-collaborative user-read-currently-playing playlist-read-private playlist-modify-public playlist-modify-private user-follow-read"; // 필요한 권한 설정
+  const STATE = "9qpasndqwneknsdd";
+  const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${encodeURIComponent(STATE)}`;
+
+  const redirectToSpotifyLogin = () => {
+    window.location.href = AUTH_URL;
+  };
+
   // const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
   const location = useLocation(); // Hook to get the current URL's path (location.pathname)
+  const dispatch = useDispatch();
   const { user, setUser } = useContext(UserContext); // UserContext 사용
+  const authenticate = useSelector((state) => state.auth.authenticate);
 
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+  } = useCurrentUserProfileQuery();
+console.log(data);
   // const searchByKeyword = (event) => {
   //   event.preventDefault();
   //   if (keyword === "") {
@@ -35,6 +55,9 @@ const AppLayout = () => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("code");
+    dispatch(authActions.LogoutSuccess());
     navigate("/");
   };
 
@@ -147,7 +170,8 @@ const AppLayout = () => {
                 ) : (
                   <Nav.Link
                     className="hamburger_menu_login_link"
-                    onClick={(e) => handleNavigation(e, "/login")}
+                    // onClick={(e) => handleNavigation(e, "/login")}
+                    onClick={() => redirectToSpotifyLogin()}
                   >
                     Log in
                   </Nav.Link>
@@ -174,9 +198,9 @@ const AppLayout = () => {
           {/* </div>
             </Form> */}
 
-          {user ? (
+          {authenticate ? (
             <div className="navbar_user_info">
-              <span>{user.name}</span>
+              <span>{data?.display_name}</span>
               <Button className="navbar_logout_btn" onClick={handleLogout}>
                 Logout
               </Button>
@@ -186,7 +210,8 @@ const AppLayout = () => {
             location.pathname !== "/login" && (
               <Button
                 className="navbar_login_btn"
-                onClick={(e) => handleNavigation(e, "/login")}
+                // onClick={(e) => handleNavigation(e, "/login")}
+                onClick={() => redirectToSpotifyLogin()}
               >
                 Log in
               </Button>

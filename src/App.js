@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css"; // 부트스트랩 CSS
@@ -14,9 +14,23 @@ import { UserContextProvider } from "./context/UserContext";
 import PlayListPage from "./pages/PlayListPage/PlayListPage.jsx";
 import TrackListPage from "./pages/TrackListPage/TrackListPage.jsx";
 import ArtistDetailPage from "./pages/ArtistDetailPage/ArtistDetailPage.jsx";
+import AfterLoginRedirectPage from "./pages/AfterLoginRedirectPage/AfterLoginRedirectPage.jsx";
+import UserPage from "./pages/UserPage/UserPage.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem('code');
+    };
+
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
 
   return (
     <div>
@@ -24,6 +38,8 @@ function App() {
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<HomePage />} />{" "}
+            <Route path="callback" element={<AfterLoginRedirectPage/>}/>
+            <Route path="user" element={<UserPage/>}/>
             {/* <Route path="music" element={<MusicPlayer/>}/> */}
             <Route
               path="playlist"
