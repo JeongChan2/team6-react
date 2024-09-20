@@ -13,7 +13,8 @@ import { useCurrentUserProfileQuery } from "../hooks/useCurrentUserProfile";
 
 const AppLayout = () => {
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; // 너가 받아온 client ID
-  const REDIRECT_URI = 'https://chan-testing-spotiy-demo-token.netlify.app/callback'; // 너가 설정한 redirect URI
+  const REDIRECT_URI = 'https://dev-radion-react-project.vercel.app/callback'; // 너가 설정한 redirect URI
+  // const REDIRECT_URI = 'http://localhost:3000/callback'; // 너가 설정한 redirect URI
   const SCOPE = "streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state playlist-read-collaborative user-read-currently-playing playlist-read-private playlist-modify-public playlist-modify-private user-follow-read"; // 필요한 권한 설정
   const STATE = "9qpasndqwneknsdd";
   const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${encodeURIComponent(STATE)}`;
