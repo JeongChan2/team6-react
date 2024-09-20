@@ -9,7 +9,8 @@ export const getOAuthAccessToken = async (code) => {
   
   authParams.append('grant_type', 'authorization_code');
   authParams.append('code', code);
-  authParams.append('redirect_uri', 'http://localhost:3000/callback');
+  // authParams.append('redirect_uri', 'http://localhost:3000/callback');
+  authParams.append('redirect_uri', 'https://chan-testing-spotiy-demo-token.netlify.app/callback');
   authParams.append('client_id', process.env.REACT_APP_CLIENT_ID);
   authParams.append('client_secret', process.env.REACT_APP_CLIENT_SECRET);
 
